@@ -24,6 +24,7 @@ import javax.json.spi.JsonProvider;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.inject.Inject;
 /**
  * Jackson2 based implmentation of Jsonb API
  */
@@ -60,11 +61,14 @@ public class JacksonJsonbBuilder implements JsonbBuilder {
         //noop
         return this;
     }
-
+    @Inject 
+    private ObjectMapper mapper;
+    
     @Override
     public Jsonb build() {
-
-        final ObjectMapper mapper = new ObjectMapper();
+        if(mapper==null){
+            mapper = new ObjectMapper();
+        }
         if(!includeNulls){
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             if(!includeEmpty){
